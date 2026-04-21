@@ -12,23 +12,29 @@ export async function GET() {
       database_id: databaseId,
       sorts: [
         {
-          property: "Creado",
+          timestamp: "created_time",
           direction: "descending",
         },
       ],
     });
 
-    // Extraer datos limpios de los clientes
     const clientes = response.results.map((page) => {
       const props = page.properties;
       return {
         id: page.id,
-        nombre: props.Nombre?.title?.[0]?.plain_text || "Sin nombre",
-        email: props.Email?.email || "Sin email",
-        telefono: props.Teléfono?.phone_number || "Sin teléfono",
-        empresa: props.Empresa?.rich_text?.[0]?.plain_text || "Sin empresa",
-        estado: props.Estado?.select?.name || "Activo",
-        proyecto: props.Proyecto?.relation?.length > 0 ? props.Proyecto.relation[0].id : null,
+        nombre: props["Cliente"]?.title?.[0]?.plain_text || "Sin nombre",
+        email: props["Email"]?.email || null,
+        whatsapp: props["WhatsApp"]?.phone_number || null,
+        rubro: props["Rubro / Nicho"]?.rich_text?.[0]?.plain_text || null,
+        etapaActual: props["Etapa Actual"]?.select?.name || "Sin etapa",
+        saludProyecto: props["Salud del Proyecto"]?.select?.name || "Sin estado",
+        contactoPrincipal: props["Contacto Principal"]?.rich_text?.[0]?.plain_text || null,
+        responsable: props["Responsable Principal"]?.people?.[0]?.name || "Sin asignar",
+        instagram: props["Instagram"]?.url || null,
+        web: props["Web"]?.url || null,
+        proximoEntregable: props["Pr\u00f3ximo Entregable"]?.rich_text?.[0]?.plain_text || null,
+        origenLead: props["Origen del Lead"]?.select?.name || null,
+        inversionAcordada: props["Inversi\u00f3n Acordada"]?.number || null,
       };
     });
 

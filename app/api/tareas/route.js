@@ -12,23 +12,22 @@ export async function GET() {
       database_id: databaseId,
       sorts: [
         {
-          property: "Creado",
+          timestamp: "created_time",
           direction: "descending",
         },
       ],
     });
 
-    // Extraer datos limpios de las tareas
     const tareas = response.results.map((page) => {
       const props = page.properties;
       return {
         id: page.id,
-        titulo: props.Titulo?.title?.[0]?.plain_text || "Sin título",
-        estado: props.Estado?.select?.name || "Sin estado",
-        cliente: props.Cliente?.relation?.length > 0 ? props.Cliente.relation[0].id : null,
-        prioridad: props.Prioridad?.select?.name || "Normal",
-        fechaVencimiento: props["Fecha de vencimiento"]?.date?.start || null,
-        asignado: props.Asignado?.people?.[0]?.name || "Sin asignar",
+        titulo: props["Tarea"]?.title?.[0]?.plain_text || "Sin titulo",
+        estado: props["Estado"]?.select?.name || "Sin estado",
+        prioridad: props["Prioridad"]?.select?.name || "Normal",
+        etapa: props["Etapa"]?.select?.name || "Sin etapa",
+        persona: props["Persona"]?.people?.[0]?.name || "Sin asignar",
+        deadline: props["Deadline"]?.date?.start || null,
       };
     });
 
